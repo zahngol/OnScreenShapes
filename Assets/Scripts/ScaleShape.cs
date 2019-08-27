@@ -25,9 +25,6 @@ public class ScaleShape : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
 	private void Start()
 	{
 		shapeRectTransform = transform.parent.parent.GetComponent<RectTransform>();
-		Debug.Log(shapeRectTransform.rect);
-		Debug.Log(shapeRectTransform.position);
-		Debug.Log(shapeRectTransform.anchoredPosition);
 	}
 
 	public void OnPointerDown(PointerEventData data)
@@ -43,16 +40,16 @@ public class ScaleShape : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
 					shapeRectTransform.anchoredPosition.y - shapeRectTransform.rect.height / 2);
 				break;
 			case Corner.topRight:
+				shapeRectTransform.pivot = new Vector2(0f,0f);
+				shapeRectTransform.anchoredPosition = new Vector2(
+					shapeRectTransform.anchoredPosition.x - shapeRectTransform.rect.width / 2, 
+					shapeRectTransform.anchoredPosition.y - shapeRectTransform.rect.height / 2);
+				break;
+			case Corner.bottomLeft:
 				shapeRectTransform.pivot = new Vector2(1f,1f);
 				shapeRectTransform.anchoredPosition = new Vector2(
 					shapeRectTransform.anchoredPosition.x + shapeRectTransform.rect.width / 2, 
 					shapeRectTransform.anchoredPosition.y + shapeRectTransform.rect.height / 2);
-				break;
-			case Corner.bottomLeft:
-				shapeRectTransform.pivot = new Vector2(0,0);
-				shapeRectTransform.anchoredPosition = new Vector2(
-					shapeRectTransform.anchoredPosition.x - shapeRectTransform.rect.width / 2, 
-					shapeRectTransform.anchoredPosition.y - shapeRectTransform.rect.height / 2);
 				break;
 			case Corner.bottomRight:
 				shapeRectTransform.pivot = new Vector2(0f, 1f);
@@ -74,7 +71,29 @@ public class ScaleShape : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
 	{
 		if (isPointerDown)
 		{
-			
+			switch (corner)
+			{
+				case Corner.topLeft:
+					shapeRectTransform.sizeDelta = new Vector2(
+						shapeRectTransform.position.x - data.position.x,
+						data.position.y - shapeRectTransform.position.y);
+					break;
+				case Corner.topRight:
+					shapeRectTransform.sizeDelta = new Vector2(
+						data.position.x - shapeRectTransform.position.x,
+						data.position.y - shapeRectTransform.position.y);
+					break;
+				case Corner.bottomLeft:
+					shapeRectTransform.sizeDelta = new Vector2(
+						shapeRectTransform.position.x - data.position.x,
+						shapeRectTransform.position.y - data.position.y);
+					break;
+				case Corner.bottomRight:
+					shapeRectTransform.sizeDelta = new Vector2(
+						data.position.x - shapeRectTransform.position.x,
+						shapeRectTransform.position.y - data.position.y);
+					break;
+			}
 		}
 	}
 }
